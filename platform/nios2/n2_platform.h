@@ -8,12 +8,14 @@
 #define N2_PS2_BASE   0xFF200100u
 #define N2_TIMER_BASE 0xFF202000u
 #define N2_TIMER_HZ   100000000u
-#define N2_WAD_BASE   0x04000000u
+/* Upper half of the DE0-CV's 64 MiB SDRAM. */
+#define N2_WAD_BASE   0x02000000u
 #else
 #define N2_PIXEL_BASE 0x08000000u
 #define N2_PS2_BASE   0x10000100u
 #define N2_TIMER_BASE 0x10002000u
 #define N2_TIMER_HZ   50000000u
+/* CPUlator Nios II DE0 simulated SDRAM reservation. */
 #define N2_WAD_BASE   0x003E0000u
 #endif
 
