@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "io.h"
 #include "doomgeneric.h"
 #include "n2_platform.h"
 
@@ -8,15 +9,21 @@
 #define OUT_H 240
 #define FB_PITCH 1024
 
-static volatile uint16_t *const fb = (volatile uint16_t *)N2_PIXEL_BASE;
+static void fb_write16(uint32_t byte_offset, uint16_t value)
+{
+    IOWR_16DIRECT(N2_PIXEL_BASE, byte_offset, value);
+}
 
 void DG_Init(void)
 {
     int y, x;
     n2_platform_init();
+
     for (y = 0; y < OUT_H; ++y) {
-        volatile uint16_t *row = (volatile uint16_t *)((volatile uint8_t *)fb + y * FB_PITCH);
-        for (x = 0; x < OUT_W; ++x) row[x] = 0;
+        uint32_t row_offset = (uint32_t)y * FB_PITCH;
+        for (x = 0; x < OUT_W; ++x) {
+            fb_write16(row_offset + (uint32_t)x * 2u, 0);
+        }
     }
 }
 
@@ -24,12 +31,21 @@ void DG_DrawFrame(void)
 {
     const uint16_t *src = (const uint16_t *)DG_ScreenBuffer;
     int y, x;
+
     for (y = 0; y < OUT_H; ++y) {
-        volatile uint16_t *dst = (volatile uint16_t *)((volatile uint8_t *)fb + y * FB_PITCH);
+        uint32_t row_offset = (uint32_t)y * FB_PITCH;
+
         if (y < 20 || y >= 220) {
-            for (x = 0; x < OUT_W; ++x) dst[x] = 0;
+            for (x = 0; x < OUT_W; ++x) {
+                fb_write16(row_offset + (uint32_t)x * 2u, 0);
+            }
         } else {
-            for (x = 0; x < OUT_W; ++x) dst[x] = src[(y - 20) * DOOM_W + x];
+            const uint16_t *src_row =
+                src + (uint32_t)(y - 20) * DOOM_W;
+
+            for (x = 0; x < OUT_W; ++x) {
+                fb_write16(row_offset + (uint32_t)x * 2u, src_row[x]);
+            }
         }
     }
 }
