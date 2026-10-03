@@ -24,7 +24,7 @@
 #define N2_TIMER_BASE 0x10002000u
 #define N2_TIMER_HZ   50000000u
 /* CPUlator DE2 SDRAM reservation for the external WAD image. */
-#define N2_WAD_BASE   0x003E0000u
+#define N2_WAD_BASE   0x003F0000u
 #define N2_SCREEN_BASE 0x01000000u
 #endif
 
