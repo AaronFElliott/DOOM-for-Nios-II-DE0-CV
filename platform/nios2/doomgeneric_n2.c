@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include "io.h"
 #include "doomgeneric.h"
 #include "n2_platform.h"
 
@@ -11,7 +10,9 @@
 
 static void fb_write16(uint32_t byte_offset, uint16_t value)
 {
-    IOWR_16DIRECT(N2_PIXEL_BASE, byte_offset, value);
+    volatile void *addr =
+        (volatile void *)(uintptr_t)(N2_PIXEL_BASE + byte_offset);
+    __builtin_sthio(addr, value);
 }
 
 void DG_Init(void)
