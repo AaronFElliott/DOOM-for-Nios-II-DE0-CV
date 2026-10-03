@@ -11,7 +11,7 @@
 #define N2_TIMER_HZ   100000000u
 /* Upper half of the DE0-CV's 64 MiB SDRAM. */
 #define N2_WAD_BASE   0x02000000u
-#define N2_SCREEN_BASE 0x00360000u
+#define N2_SCREEN_BASE 0x01000000u
 #else
 /*
  * CPUlator DE2: use ordinary SDRAM for the framebuffer so simulation does
@@ -25,7 +25,7 @@
 #define N2_TIMER_HZ   50000000u
 /* CPUlator DE2 SDRAM reservation for the external WAD image. */
 #define N2_WAD_BASE   0x003E0000u
-#define N2_SCREEN_BASE 0x00360000u
+#define N2_SCREEN_BASE 0x01000000u
 #endif
 
 #define N2_TIMER_STATUS   0x00u
