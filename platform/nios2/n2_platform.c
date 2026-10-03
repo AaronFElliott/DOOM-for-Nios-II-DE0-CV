@@ -2,24 +2,37 @@
 #include <string.h>
 #include "n2_platform.h"
 
-static volatile uint32_t *const timer = (volatile uint32_t *)N2_TIMER_BASE;
 static uint32_t last_count, remainder, elapsed_ms;
 static int timer_ready;
 
+static uint16_t timer_read16(uint32_t offset)
+{
+    return *(volatile uint16_t *)(uintptr_t)(N2_TIMER_BASE + offset);
+}
+
+static void timer_write16(uint32_t offset, uint16_t value)
+{
+    *(volatile uint16_t *)(uintptr_t)(N2_TIMER_BASE + offset) = value;
+}
+
 static uint32_t snapshot(void)
 {
-    timer[N2_TIMER_SNAPL / 4u] = 0;
-    return (((uint32_t)(uint16_t)timer[N2_TIMER_SNAPH / 4u]) << 16) |
-           (uint16_t)timer[N2_TIMER_SNAPL / 4u];
+    uint16_t low, high;
+
+    timer_write16(N2_TIMER_SNAPL, 0);
+    low = timer_read16(N2_TIMER_SNAPL);
+    high = timer_read16(N2_TIMER_SNAPH);
+
+    return ((uint32_t)high << 16) | low;
 }
 
 static void timer_init(void)
 {
-    timer[N2_TIMER_CONTROL / 4u] = 0;
-    timer[N2_TIMER_STATUS / 4u] = 0;
-    timer[N2_TIMER_PERIODL / 4u] = 0xFFFFu;
-    timer[N2_TIMER_PERIODH / 4u] = 0xFFFFu;
-    timer[N2_TIMER_CONTROL / 4u] = 6;
+    timer_write16(N2_TIMER_CONTROL, 0);
+    timer_write16(N2_TIMER_STATUS, 0);
+    timer_write16(N2_TIMER_PERIODL, 0xFFFFu);
+    timer_write16(N2_TIMER_PERIODH, 0xFFFFu);
+    timer_write16(N2_TIMER_CONTROL, 6);
     last_count = snapshot();
     remainder = elapsed_ms = 0;
     timer_ready = 1;
