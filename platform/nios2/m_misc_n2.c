@@ -55,11 +55,12 @@
 
 void M_MakeDirectory(char *path)
 {
-#ifdef _WIN32
-    mkdir(path);
-#else
-    mkdir(path, 0755);
-#endif
+    /*
+     * The Nios II target has no writable host filesystem.
+     * Doom uses this helper for optional configuration directories;
+     * there is nowhere meaningful to create them on the bare-metal target.
+     */
+    (void)path;
 }
 
 // Check if a file exists
