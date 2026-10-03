@@ -1,4 +1,4 @@
-DOOM_DIR := ../../third_party/doomgeneric
+DOOM_DIR := ../../third_party/doomgeneric/doomgeneric
 N2_DIR := ../../platform/nios2
 
 DOOM_CPPFLAGS += -I$(DOOM_DIR) -I$(N2_DIR)
