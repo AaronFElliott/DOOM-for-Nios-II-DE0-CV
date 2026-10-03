@@ -93,7 +93,7 @@ int n2_ps2_getkey(int *pressed, unsigned char *key)
     static int release, extended;
     volatile uint32_t *ps2 = (volatile uint32_t *)N2_PS2_BASE;
     for (;;) {
-        uint16_t v = (uint16_t)ps2[0];
+        uint16_t v = IORD_16DIRECT(N2_PS2_BASE, 0);
         unsigned int c;
         unsigned char mapped;
         if (!(v & N2_PS2_RVALID)) return 0;
