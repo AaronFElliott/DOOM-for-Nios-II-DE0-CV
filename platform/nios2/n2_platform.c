@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include "io.h"
 #include "n2_platform.h"
 
 static uint32_t last_count, remainder, elapsed_ms;
@@ -7,12 +8,12 @@ static int timer_ready;
 
 static uint16_t timer_read16(uint32_t offset)
 {
-    return *(volatile uint16_t *)(uintptr_t)(N2_TIMER_BASE + offset);
+    return IORD_16DIRECT(N2_TIMER_BASE, offset);
 }
 
 static void timer_write16(uint32_t offset, uint16_t value)
 {
-    *(volatile uint16_t *)(uintptr_t)(N2_TIMER_BASE + offset) = value;
+    IOWR_16DIRECT(N2_TIMER_BASE, offset, value);
 }
 
 static uint32_t snapshot(void)
