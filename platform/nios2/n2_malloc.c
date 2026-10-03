@@ -4,6 +4,10 @@
 
 #include "n2_platform.h"
 
+#ifdef malloc
+#undef malloc
+#endif
+
 #define N2_SCREEN_BYTES (320u * 200u * 4u)
 
 void *n2_malloc(size_t size)
