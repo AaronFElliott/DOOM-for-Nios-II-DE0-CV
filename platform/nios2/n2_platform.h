@@ -18,7 +18,7 @@
  * not spend excessive time emulating per-pixel writes to the VGA device.
  * The VGA pixel-buffer controller is pointed at this region during init.
  */
-#define N2_PIXEL_BASE 0x003A0000u
+#define N2_PIXEL_BASE 0x00380000u
 #define N2_PIXEL_CTRL_BASE 0x10003020u
 #define N2_PS2_BASE   0x10000100u
 #define N2_TIMER_BASE 0x10002000u
